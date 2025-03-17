@@ -1,0 +1,21 @@
+formatter: "markdown table"
+
+content: |-
+  {{ .Header }}
+  ## Introduction
+  The following repository contains terraform code for a Azure Virtual Machine, either Linux or Windows
+  
+  The following module creates
+  - A single Virtual Machine (Either Windows or Linux)
+  - A single NIC for the Virtual Machine
+
+  This module is not for commercial use, and has purely been created for lab exercises and own use.
+
+  ## Example Deployment
+  The `example/` folder contains an example configuration for deploying this module. The variables for this deployment can be found within the `vars/` folder.
+
+  {{ .Providers }}
+
+  {{ .Outputs }}
+
+  {{ .Inputs }}  
