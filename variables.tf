@@ -55,7 +55,7 @@ variable "os_disk" {
       "None",
       "ReadOnly",
       "ReadWrite"
-    ], var.os_disk.value.caching)
+    ], var.os_disk.caching)
     error_message = "Caching value must be 'None', 'ReadOnly' or 'ReadWrite'"
   }
   validation {
@@ -65,7 +65,7 @@ variable "os_disk" {
       "StandardSSD_ZRS",
       "Premium_LRS",
       "Premium_ZRS"
-    ], var.os_disk.value.storage_account_type)
+    ], var.os_disk.storage_account_type)
     error_message = "Storage Account Type must be 'Standard_LRS', 'StandardSSD_LRS', 'StandardSSD_ZRS','Premium_LRS' or 'Premium_ZRS'"
   }
   default = {
@@ -95,27 +95,26 @@ variable "source_image_reference" {
 variable "ip_configuration" {
   type = object({
     private_ip_address_allocation = optional(string, "Dynamic")
-    private_ip_address_version    = optional(string, "IPv4") 
+    private_ip_address_version    = optional(string, "IPv4")
     private_ip_address            = optional(string, null)
-    subnet_id                     = optional(string, null)
   })
   validation {
     condition = contains([
       "Dynamic",
       "Static"
-    ], var.ip_configuration.value.private_ip_address_allocation)
+    ], var.ip_configuration.private_ip_address_allocation)
     error_message = "Private IP Allocation must be either 'Dynamic' or 'Static'."
   }
   validation {
     condition = contains([
       "IPv4",
       "IPv6"
-    ], var.ip_configuration.value.private_ip_address_version)
+    ], var.ip_configuration.private_ip_address_version)
     error_message = "Private IP Address Version must be either 'IPv4' or 'IPv6'."
   }
   validation {
-    condition = var.ip_configuration.value.private_ip_address == null ? true : can(
-      regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}$", var.ip_configuration.value.private_ip_address)
+    condition = var.ip_configuration.private_ip_address == null ? true : can(
+      regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}$", var.ip_configuration.private_ip_address)
     )
     error_message = "The Private IP address must be a valid IP address."
   }
@@ -124,9 +123,13 @@ variable "ip_configuration" {
       private_ip_address_allocation = optional(string, "Dynamic") - IP Address Allocation for the Virtual Machines default NIC (Options are 'Static or 'Dynamic', defaults to 'Dynamic')
       private_ip_address_version    = optional(string, "IPv4")    - Private IP Address Version, options are 'IPv4' or 'IPv6', defaults to 'IPv4'
       private_ip_address            = optional(string, null)      - The Private IP Address of the NIC (Optional)
-      subnet_id                     = optional(string, null)      - The Subnet ID where to place the virtual machine (Optional)
     })
   DESC
+}
+
+variable "subnet_id" {
+  type        = string
+  description = "The ID of the subnet which the Virtual Machine should be deployed to."
 }
 
 variable "size" {

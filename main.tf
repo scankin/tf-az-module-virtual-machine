@@ -13,8 +13,8 @@ resource "azurerm_windows_virtual_machine" "this" {
   network_interface_ids = local.network_interface_ids
 
   os_disk {
-    caching              = var.os_disk.value.caching
-    storage_account_type = var.os_type.value.storage_account_type
+    caching              = var.os_disk.caching
+    storage_account_type = var.os_disk.storage_account_type
   }
 
   dynamic "source_image_reference" {
@@ -39,14 +39,15 @@ resource "azurerm_linux_virtual_machine" "this" {
 
   size = var.size
 
-  admin_username = var.admin_username
-  admin_password = var.admin_password
+  admin_username                  = var.admin_username
+  admin_password                  = var.admin_password
+  disable_password_authentication = var.admin_password == null ? true : false
 
   network_interface_ids = local.network_interface_ids
 
   os_disk {
-    caching              = var.os_disk.value.caching
-    storage_account_type = var.os_type.value.storage_account_type
+    caching              = var.os_disk.caching
+    storage_account_type = var.os_disk.storage_account_type
   }
 
   dynamic "source_image_reference" {
@@ -69,10 +70,10 @@ resource "azurerm_network_interface" "this" {
 
   ip_configuration {
     name                          = join("-", ["ip", "conf", var.virtual_machine_name])
-    private_ip_address_allocation = var.ip_configuration.value.private_ip_address_allocation
-    private_ip_address_version    = var.ip_configuration.value.private_ip_address_version
-    private_ip_address            = var.ip_configuration.value.private_ip_address 
-    subnet_id                     = var.ip_configuration.value.subnet_id
+    private_ip_address_allocation = var.ip_configuration.private_ip_address_allocation
+    private_ip_address_version    = var.ip_configuration.private_ip_address_version
+    private_ip_address            = var.ip_configuration.private_ip_address
+    subnet_id                     = var.subnet_id
     primary                       = true
   }
 }
