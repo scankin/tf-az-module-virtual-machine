@@ -1,3 +1,4 @@
+# Virtual Machine Resources
 resource "azurerm_windows_virtual_machine" "this" {
   count = var.os_type == "windows" ? 1 : 0
 
@@ -63,6 +64,9 @@ resource "azurerm_linux_virtual_machine" "this" {
   tags = var.tags
 }
 
+## TODO: Add managed disk resource
+
+# Networking Resources
 resource "azurerm_network_interface" "this" {
   name                = join("-", ["nic", var.virtual_machine_name])
   location            = var.location
@@ -77,4 +81,3 @@ resource "azurerm_network_interface" "this" {
     primary                       = true
   }
 }
-
