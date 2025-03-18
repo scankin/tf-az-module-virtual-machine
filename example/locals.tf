@@ -25,4 +25,16 @@ locals {
     "rg",
     local.name_suffix
   ])
+
+  virtual_network_name = join("-", [
+    var.service,
+    "vnet",
+    local.name_suffix
+  ])
+
+  virtual_machine_name = join("-", [
+    var.service,
+    "__key__",
+    local.name_suffix
+  ])
 }
