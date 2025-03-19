@@ -8,6 +8,7 @@ content: |-
   The following module creates
   - A single Virtual Machine (Either Windows or Linux)
   - A single NIC for the Virtual Machine
+  - A number of managed disks connected to the virtual machine
 
   This module is not for commercial use, and has purely been created for lab exercises and own use.
 
