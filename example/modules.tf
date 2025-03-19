@@ -14,6 +14,7 @@ module "virtual_machines" {
   source_image_reference = each.value.source_image_reference
   size                   = each.value.size
   ip_configuration       = each.value.ip_configuration
+  managed_disks          = each.value.managed_disks
   subnet_id              = azurerm_subnet.this["vms"].id
 
   tags = local.tags

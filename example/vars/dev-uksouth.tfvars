@@ -23,6 +23,14 @@ virtual_machines = {
       caching              = "ReadWrite"
       storage_account_type = "Standard_LRS"
     }
+    managed_disks = {
+      disk01 = {
+        caching              = "ReadWrite"
+        create_option        = "Empty"
+        storage_account_type = "Standard_LRS"
+        disk_size_gb         = "128"
+      }
+    }
     source_image_reference = {
       publisher = "MicrosoftWindowsServer"
       offer     = "WindowsServer"
@@ -40,6 +48,14 @@ virtual_machines = {
     os_disk = {
       caching              = "ReadWrite"
       storage_account_type = "Standard_LRS"
+    }
+    managed_disks = {
+      disk01 = {
+        caching              = "ReadWrite"
+        create_option        = "Empty"
+        storage_account_type = "Standard_LRS"
+        disk_size_gb         = "128"
+      }
     }
     source_image_reference = {
       publisher = "Canonical"

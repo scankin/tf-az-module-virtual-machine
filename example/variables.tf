@@ -63,6 +63,12 @@ variable "virtual_machines" {
       caching              = string
       storage_account_type = string
     })
+    managed_disks = map(object({
+      caching              = string
+      create_option        = string
+      storage_account_type = string
+      disk_size_gb         = string
+    }))
     source_image_reference = object({
       publisher = string
       offer     = string

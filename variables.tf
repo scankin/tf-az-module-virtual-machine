@@ -37,6 +37,25 @@ variable "os_type" {
   }
 }
 
+variable "managed_disks" {
+  type = map(object({
+    caching              = optional(string, "ReadWrite")
+    create_option        = optional(string, "Empty")
+    storage_account_type = optional(string, "Standard_LRS")
+    disk_size_gb         = string
+  }))
+  description = <<DESC
+    A map of objects containing the details for managed disks for the virtual machine.
+  DESC
+  default     = {}
+}
+
+variable "hostname" {
+  type        = string
+  description = "The hostname of the virtual machine."
+  default     = null
+}
+
 variable "os_disk" {
   type = object({
     caching              = string
