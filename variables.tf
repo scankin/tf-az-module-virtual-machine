@@ -49,22 +49,22 @@ variable "managed_disks" {
     disk_size_gb         = string
   }))
   validation {
-    condition = contains([
+    condition = alltrue([for v in var.managed_disks : contains([
       "None",
       "ReadOnly",
       "ReadWrite"
-    ], var.managed_disks.caching)
+    ], v.caching)])
     error_message = "Managed disk caching type must be 'None', 'ReadOnly' or 'ReadWrite'"
   }
   validation {
-    condition = contains([
+    condition = alltrue([for v in var.managed_disks : contains([
       "Empty",
       "Attach"
-    ], var.managed_disks.create_option)
+    ], v.create_option)])
     error_message = "Managed disk create option must be either 'Empty' or 'Attach'"
   }
   validation {
-    condition = contains([
+    condition = alltrue([for v in var.managed_disks : contains([
       "Standard_LRS",
       "StandardSSD_ZRS",
       "Premium_LRS",
@@ -72,7 +72,7 @@ variable "managed_disks" {
       "Premium_ZRS",
       "StandardSSD_LRS",
       "UltraSSD_LRS"
-    ], var.managed_disks.storage_account_type)
+    ], v.storage_account_type)])
     error_message = "Managed disk storage account type must be one of the following: 'Standard_LRS', 'StandardSSD_ZRS', 'Premium_LRS', 'PremiumV2_LRS', 'Premium_ZRS', 'StandardSSD_LRS' or 'UltraSSD_LRS'"
   }
   description = <<DESC
@@ -84,7 +84,7 @@ variable "managed_disks" {
 variable "hostname" {
   type = string
   validation {
-    condition     = length(var.hostname) <= 15
+    condition     = var.hostname != null ? length(var.hostname) <= 15 : true
     error_message = "Hostname must be less than 15 characters in length"
   }
   description = "The hostname of the virtual machine."
