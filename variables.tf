@@ -1,7 +1,11 @@
 ## Common Variables
 ##################################
 variable "virtual_machine_name" {
-  type        = string
+  type = string
+  validation {
+    condition     = length(var.virtual_machine_name) >= 1 && length(var.virtual_machine_name) <= 64
+    error_message = "Virtual machine must be between 1 and 64 characters long"
+  }
   description = "The name of the virtual network."
 }
 
@@ -40,10 +44,37 @@ variable "os_type" {
 variable "managed_disks" {
   type = map(object({
     caching              = optional(string, "ReadWrite")
-    create_option        = optional(string, "Empty")
+    create_option        = optional(string, "Attach")
     storage_account_type = optional(string, "Standard_LRS")
     disk_size_gb         = string
   }))
+  validation {
+    condition = alltrue([for v in var.managed_disks : contains([
+      "None",
+      "ReadOnly",
+      "ReadWrite"
+    ], v.caching)])
+    error_message = "Managed disk caching type must be 'None', 'ReadOnly' or 'ReadWrite'"
+  }
+  validation {
+    condition = alltrue([for v in var.managed_disks : contains([
+      "Empty",
+      "Attach"
+    ], v.create_option)])
+    error_message = "Managed disk create option must be either 'Empty' or 'Attach'"
+  }
+  validation {
+    condition = alltrue([for v in var.managed_disks : contains([
+      "Standard_LRS",
+      "StandardSSD_ZRS",
+      "Premium_LRS",
+      "PremiumV2_LRS",
+      "Premium_ZRS",
+      "StandardSSD_LRS",
+      "UltraSSD_LRS"
+    ], v.storage_account_type)])
+    error_message = "Managed disk storage account type must be one of the following: 'Standard_LRS', 'StandardSSD_ZRS', 'Premium_LRS', 'PremiumV2_LRS', 'Premium_ZRS', 'StandardSSD_LRS' or 'UltraSSD_LRS'"
+  }
   description = <<DESC
     A map of objects containing the details for managed disks for the virtual machine.
   DESC
@@ -51,7 +82,11 @@ variable "managed_disks" {
 }
 
 variable "hostname" {
-  type        = string
+  type = string
+  validation {
+    condition     = var.hostname != null ? length(var.hostname) <= 15 : true
+    error_message = "Hostname must be less than 15 characters in length"
+  }
   description = "The hostname of the virtual machine."
   default     = null
 }
